@@ -1,47 +1,41 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-web';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 
-export default function InscriptionScreen() {
+export default function LoginScreen() {
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const passwordMismatch = useMemo(() => password !== passwordConfirm, [password, passwordConfirm]);
 
   const navigation = useNavigation();
-  
-  const handleRegistration = useCallback(() => {
-    if (password !== passwordConfirm) {
-      setPasswordError(true);
-      return alert('Les mots de passe ne correspondent pas');
-    }
 
-    if (!nom || !prenom || !password || !passwordConfirm) {
+  const handleLogin = useCallback(async () => {
+    if (!nom || !prenom || !password) {
       return alert('Veuillez remplir tous les champs');
     }
 
-    if (password.length < 3) {
+    const storedUser = await AsyncStorage.getItem('user');
+    const user = JSON.parse(storedUser);
+
+    if (user && user.nom === nom && user.prenom === prenom && user.password === password) {
+        AsyncStorage.setItem('userConnected', JSON.stringify({ nom, prenom, password }));
+        navigation.navigate('Nos évènements');
+    } else {
       setPasswordError(true);
-      return alert('Le mot de passe doit contenir au moins 3 caractères');
+      alert('Informations d\'identification incorrectes');
     }
 
-    AsyncStorage.setItem('user', JSON.stringify({ nom, prenom, password }));
-
-    setPasswordError(false);
-
-    navigation.navigate('Connexion');
-
-  }, [nom, prenom, password, passwordConfirm]);
+    //Redirection sur la page events si c'est tout ok
+  }, [nom, prenom, password, navigation]);
   
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inscription</Text>
+      <Text style={styles.title}>Connecte-toi !</Text>
 
       <View style={styles.profileImageContainer}>
         <img src={require('../assets/image/profil_pic.png')} style={styles.profileImage} />
@@ -50,11 +44,10 @@ export default function InscriptionScreen() {
       <View style={styles.formContainer}>
         <TextInput style={styles.input} placeholder="Prénom" placeholderTextColor="gray" autoFocus={true} value={prenom} onChangeText={(text) => setPrenom(text)}/>
         <TextInput style={styles.input} placeholder="Nom" placeholderTextColor="gray" autoFocus={true} value={nom} onChangeText={(text) => setNom(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Confirmer le mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={passwordConfirm} onChangeText={(text) => setPasswordConfirm(text)}/>
+        <TextInput style={styles.input} placeholder="Mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)}/>
 
-        <Pressable style={styles.sendButton} title="Envoyer" onPress={handleRegistration}>
-          <Text>Envoyer</Text>
+        <Pressable style={styles.sendButton} title="Envoyer" onPress={handleLogin}>
+          <Text>Me connecter</Text>
         </Pressable>
       </View>
     </View>

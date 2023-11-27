@@ -15,6 +15,7 @@ const TodoListItem = ({ info }) => {
       <View style={styles.container}>
         <Pressable style={styles.itemButton} onPress={handlePress}>
           <Text style={styles.itemText}>{info.title_fr}</Text>
+          
         </Pressable>
       </View>
     );
