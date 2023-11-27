@@ -1,22 +1,21 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Button, View } from 'react-native';
+import { Text, StyleSheet, Button, View, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
-const TodoListItem = ({ title, onDelete }) => {
+const TodoListItem = ({ info }) => {
     const navigation = useNavigation();
   
     const handlePress = () => {
       // Naviguer vers la page de détail avec le titre comme paramètre
-      navigation.navigate('TodoDetail', { title });
+      navigation.navigate('TodoDetail', { info });
     };
   
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.itemButton} onPress={handlePress}>
-          <Text style={styles.itemText}>{title}</Text>
-        </TouchableOpacity>
-        <Button title="Supprimer" onPress={onDelete} />
+        <Pressable style={styles.itemButton} onPress={handlePress}>
+          <Text style={styles.itemText}>{info.title_fr}</Text>
+        </Pressable>
       </View>
     );
   }

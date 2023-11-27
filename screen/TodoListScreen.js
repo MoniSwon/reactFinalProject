@@ -1,44 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View, TextInput, Button } from 'react-native';
 import TodoListItem from '../components/TodoListItem';
+import { getData } from '../api/events/EventCall';
+import { useRoute } from '@react-navigation/native';
 
 export default function TodoListScreen() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: 'Todo 1' },
-    { id: 2, title: 'Todo 2' },
-  ]);
 
-  const [newTodoTitle, setNewTodoTitle] = useState('');
-  const [isInputVisible, setIsInputVisible] = useState(false);
+  const [events, setEvents] = useState([]);
 
-  const handleDeleteTodo = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const route = useRoute();
+  const postalCode = route.params?.postalCode || '69002';
+
+  const getFirstDayOfMonth = () => {
+    const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const firstDayOfMonth = `${year}-${month}-01`;
+  return firstDayOfMonth;
   };
 
-  const handleAddTodo = () => {
-    if (newTodoTitle.trim() !== '') {
-      setTodos((prevTodos) => [
-        ...prevTodos,
-        { id: prevTodos.length + 1, title: newTodoTitle },
-      ]);
-      setNewTodoTitle('');
-      setIsInputVisible(false);
-    }
-  };
+  useEffect(() => {
+    getData(getFirstDayOfMonth(), postalCode)
+    .then((res) => {
+      setEvents(res);
+    })
+  }, [postalCode]);
 
 
   const renderItem = ({ item }) => (
     <TodoListItem
-      title={item.title}
-      onDelete={() => handleDeleteTodo(item.id)}
-    />
+    info={item}
+  />
   );
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredTodos = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredEvents = events.filter((event) =>
+  event.title_fr.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
   return (
     <View style={styles.container}>
@@ -47,32 +47,11 @@ export default function TodoListScreen() {
         placeholder="Rechercher par titre"
         onChangeText={(text) => setSearchTerm(text)}
       />
-      {isInputVisible && (
-        <TextInput
-          style={styles.input}
-          placeholder="Nom de la tâche"
-          onChangeText={(text) => setNewTodoTitle(text)}
-          value={newTodoTitle}
-        />
-      )}
-      <Button
-        title={isInputVisible ? 'Ajouter la tâche' : 'Nouvelle tâche'}
-        onPress={() => {
-          if (isInputVisible) {
-            handleAddTodo();
-          } else {
-            setIsInputVisible(!isInputVisible);
-            setNewTodoTitle('');
-          }
-        }}
-      />
-      {isInputVisible && (
-        <Button title="Annuler" onPress={() => setIsInputVisible(false)} />
-      )}
+           
       <FlatList
-        data={filteredTodos}
+        data={filteredEvents}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.uid.toString()}
         contentContainerStyle={styles.flatList}
         scrollEnabled={true}
       />
