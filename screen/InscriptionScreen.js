@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-web';
+import { Pressable, StyleSheet, Text, View, TextInput, Image } from 'react-native';
 
 export default function InscriptionScreen() {
   const [nom, setNom] = useState('');
@@ -36,7 +35,7 @@ export default function InscriptionScreen() {
       <Text style={styles.title}>Inscription</Text>
 
       <View style={styles.profileImageContainer}>
-        <img src={require('../assets/image/profil_pic.png')} style={styles.profileImage} />
+        <Image src={require('../assets/image/profil_pic.png')} style={styles.profileImage} />
       </View>
 
       <View style={styles.formContainer}>
