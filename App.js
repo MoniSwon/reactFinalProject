@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import TodoListScreen from './screen/TodoListScreen';
 import TodoDetailScreen from './screen/TodoDetailScreen';
-import InscriptionScreen from './screen/InscriptionScreen';
+import InscriptionScreen from './screen/InscriptionScreen'
+import DashboardScreen from './screen/DashboardScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -15,6 +16,7 @@ const TodoListStack = () => (
   screenOptions={{
     headerShown: false
   }}>
+    <Stack.Screen name="Accueil" component={DashboardScreen} options={{ headerShown: false }} />
     <Stack.Screen name="TodoList" component={TodoListScreen} options={{ headerShown: false }} />
     <Stack.Screen name="TodoDetail" component={TodoDetailScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
@@ -39,8 +41,8 @@ export default function App() {
           tabBarIcon: ({ color, size }) => {
             let iconName;
 
-            if (route.name === 'ToDoList') {
-              iconName = 'format-list-bulleted';
+            if (route.name === 'Nos évènements') {
+              iconName = 'auto-fix';
             } else if (route.name === 'Inscription') {
               iconName = 'account';
             }
@@ -50,7 +52,7 @@ export default function App() {
           },
         })}
       >
-        <Tab.Screen name="ToDoList" component={TodoListStack} />
+        <Tab.Screen name="Nos évènements" component={TodoListStack} />
         <Tab.Screen name="Inscription" component={InscriptionStack} />
       </Tab.Navigator>
     </NavigationContainer>
