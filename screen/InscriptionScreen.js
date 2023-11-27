@@ -1,5 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, Image } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { TextInput } from 'react-native-web';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function InscriptionScreen() {
   const [nom, setNom] = useState('');
@@ -9,7 +13,8 @@ export default function InscriptionScreen() {
   const [passwordError, setPasswordError] = useState(false);
   const passwordMismatch = useMemo(() => password !== passwordConfirm, [password, passwordConfirm]);
 
-
+  const navigation = useNavigation();
+  
   const handleRegistration = useCallback(() => {
     if (password !== passwordConfirm) {
       setPasswordError(true);
@@ -25,8 +30,12 @@ export default function InscriptionScreen() {
       return alert('Le mot de passe doit contenir au moins 3 caractères');
     }
 
+    AsyncStorage.setItem('user', JSON.stringify({ nom, prenom, password }));
+
     setPasswordError(false);
-    alert(`Bonjour ${prenom} ${nom}, votre mot de passe est ${password}`);
+
+    navigation.navigate('Connexion');
+
   }, [nom, prenom, password, passwordConfirm]);
   
 
