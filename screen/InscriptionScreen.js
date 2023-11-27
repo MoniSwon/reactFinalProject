@@ -39,13 +39,13 @@ export default function InscriptionScreen() {
       </View>
 
       <View style={styles.formContainer}>
-        <TextInput style={styles.input} placeholder="Prénom" placeholderTextColor="gray" autoFocus={true} value={prenom} onChangeText={(text) => setPrenom(text)}/>
-        <TextInput style={styles.input} placeholder="Nom" placeholderTextColor="gray" autoFocus={true} value={nom} onChangeText={(text) => setNom(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Confirmer le mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={passwordConfirm} onChangeText={(text) => setPasswordConfirm(text)}/>
+        <TextInput style={styles.input} placeholder="Prénom" placeholderTextColor="#003399" autoFocus={true} value={prenom} onChangeText={(text) => setPrenom(text)}/>
+        <TextInput style={styles.input} placeholder="Nom" placeholderTextColor="#003399" autoFocus={true} value={nom} onChangeText={(text) => setNom(text)}/>
+        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Mot de passe" placeholderTextColor="#003399" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)}/>
+        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Confirmer le mot de passe" placeholderTextColor="#003399" autoFocus={true} secureTextEntry={true} value={passwordConfirm} onChangeText={(text) => setPasswordConfirm(text)}/>
 
         <Pressable style={styles.sendButton} title="Envoyer" onPress={handleRegistration}>
-          <Text>Envoyer</Text>
+          <Text style={styles.buttonText}>Envoyer</Text>
         </Pressable>
       </View>
     </View>
@@ -78,12 +78,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#003399',
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: 'lightgray'
+    backgroundColor: '#FFFFFF'
   },
   inputError: {
     height: 40,
@@ -97,12 +97,17 @@ const styles = StyleSheet.create({
   sendButton: {
     height: 40,
     marginTop: 20,
-    backgroundColor: 'white',
-    borderColor: 'gray',
+    backgroundColor: '#003399',
+    borderColor: '#003399',
     borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18,
+  },
 });
 
