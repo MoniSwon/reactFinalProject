@@ -39,7 +39,7 @@ export default function DashboardScreen() {
         style={styles.image}
     >
         <View style={styles.container}>
-            <Text style={styles.title}>L'Agenda Culturel<br/>Des Quartiers de Lyon</Text>
+            <Text style={styles.title}>L'Agenda Culturel - Des Quartiers de Lyon</Text>
             <FlatList
                 data={postalCodes}
                 renderItem={renderItem}

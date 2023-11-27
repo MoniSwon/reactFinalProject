@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View, TextInput, Button } from 'react-native';
+import { FlatList, StyleSheet, View, TextInput, Button, ImageBackground } from 'react-native';
 import TodoListItem from '../components/TodoListItem';
 import { getData } from '../api/events/EventCall';
 import { useRoute } from '@react-navigation/native';
@@ -29,8 +29,9 @@ export default function TodoListScreen() {
 
   const renderItem = ({ item }) => (
     <TodoListItem
-    info={item}
-  />
+      info={item}
+    />
+  
   );
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: '#003399',
   },
   flatList: {
     justifyContent: 'center',
@@ -70,9 +72,18 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#FFFFFF',
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
+    color: '#003399',
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+    textDecorationColor: '#FFFFFF',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });

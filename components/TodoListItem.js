@@ -35,11 +35,17 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         borderWidth: 1,
-        borderColor: 'gray',
-        backgroundColor: 'gray',
+        borderColor: '#FFFFFF',
+        backgroundColor: '#FFFFFF',
+        paddingTop: 15,
+        paddingBottom: 15,
+        margin: 5,
+        borderRadius: 5,
+        width: 300,
       },
       itemText: {
         textAlign: 'center',
+        color: '#003399',
       },
 });
 
