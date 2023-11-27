@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-web';
+import { Pressable, StyleSheet, Text, View, Image, TextInput } from 'react-native';
 
 export default function InscriptionScreen() {
   const [nom, setNom] = useState('');
@@ -11,7 +10,7 @@ export default function InscriptionScreen() {
   const passwordMismatch = useMemo(() => password !== passwordConfirm, [password, passwordConfirm]);
 
 
-  const handleRegistration = useCallback(() => {
+  const handleRegistration = useCallback(async () => {
     if (password !== passwordConfirm) {
       setPasswordError(true);
       return alert('Les mots de passe ne correspondent pas');
@@ -26,24 +25,45 @@ export default function InscriptionScreen() {
       return alert('Le mot de passe doit contenir au moins 3 caractères');
     }
 
-    setPasswordError(false);
-    alert(`Bonjour ${prenom} ${nom}, votre mot de passe est ${password}`);
+    try {
+      const response = await fetch('http://192.168.1.4:8081', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nom, prenom, password }),
+      });
+
+      const result = await response.json();
+      alert(result.message); // Affiche le message renvoyé par le serveur
+
+      // Effacez les champs après une inscription réussie
+      if (response.status === 200) {
+        setNom('');
+        setPrenom('');
+        setPassword('');
+        setPasswordConfirm('');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Une erreur est survenue lors de l\'inscription');
+    }
   }, [nom, prenom, password, passwordConfirm]);
-  
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inscription</Text>
 
       <View style={styles.profileImageContainer}>
-        <img src={require('../assets/image/profil_pic.png')} style={styles.profileImage} />
+        <Image source={require('../assets/image/profil_pic.png')} style={styles.profileImage} />
       </View>
 
       <View style={styles.formContainer}>
-        <TextInput style={styles.input} placeholder="Prénom" placeholderTextColor="gray" autoFocus={true} value={prenom} onChangeText={(text) => setPrenom(text)}/>
-        <TextInput style={styles.input} placeholder="Nom" placeholderTextColor="gray" autoFocus={true} value={nom} onChangeText={(text) => setNom(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)}/>
-        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Confirmer le mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={passwordConfirm} onChangeText={(text) => setPasswordConfirm(text)}/>
+        <TextInput style={styles.input} placeholder="Prénom" placeholderTextColor="gray" autoFocus={true} value={prenom} onChangeText={(text) => setPrenom(text)} />
+        <TextInput style={styles.input} placeholder="Nom" placeholderTextColor="gray" autoFocus={true} value={nom} onChangeText={(text) => setNom(text)} />
+        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)} />
+        <TextInput style={passwordError || passwordMismatch ? styles.inputError : styles.input} placeholder="Confirmer le mot de passe" placeholderTextColor="gray" autoFocus={true} secureTextEntry={true} value={passwordConfirm} onChangeText={(text) => setPasswordConfirm(text)} />
 
         <Pressable style={styles.sendButton} title="Envoyer" onPress={handleRegistration}>
           <Text>Envoyer</Text>
