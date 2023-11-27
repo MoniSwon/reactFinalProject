@@ -2,6 +2,11 @@ import React from 'react';
 import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+function removeHtmlTags(input) {
+  const regex = /<[^>]*>/g;
+  return input.replace(regex, '');
+}
+
 const TodoDetailScreen = ({ route }) => {
     const navigation = useNavigation();
     const { info } = route.params;
@@ -13,8 +18,8 @@ const TodoDetailScreen = ({ route }) => {
         <View scrollEnabled={true}>
           <Text style={styles.title}>Titre : {info.title_fr}</Text>
           <Text style={styles.date}>Date : {info.daterange_fr}</Text>
-          <Text style={styles.phrase}>Catch Phrase : {info.description_fr}</Text>
-          <Text style={styles.description}>Description : {info.longdescription_fr}</Text>
+          <Text style={styles.phrase}>{info.description_fr}</Text>
+        <Text style={styles.description}>Description : {removeHtmlTags(info.longdescription_fr)}</Text>
           <Image source={{ uri: info.image }} style={{ width: 200, height: 200, marginLeft: 95}} />
           <Text style={styles.lieu}>Nom du lieu : {info.location_name}</Text>
           <Text style={styles.adresse}>Adresse : {info.location_address}</Text>
