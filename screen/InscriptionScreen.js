@@ -35,6 +35,7 @@ export default function InscriptionScreen() {
       });
 
       const result = await response.json();
+      console.log(result);
       alert(result.message); // Affiche le message renvoyé par le serveur
 
       // Effacez les champs après une inscription réussie

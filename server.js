@@ -16,6 +16,13 @@ mongoose.connect('mongodb+srv://admin:${password}@cluster0.ioscysq.mongodb.net/'
     useUnifiedTopology: true,
 });
 
+
+const connection = mongoose.connection;
+
+connection.once('open', () => {
+    console.log('Connexion à la base de données MongoDB établie avec succès');
+});
+
 // Définissez le schéma pour les utilisateurs
 const userSchema = new mongoose.Schema({
     nom: String,
